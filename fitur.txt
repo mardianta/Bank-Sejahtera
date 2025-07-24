@@ -1,0 +1,69 @@
+==================================================================
+  FITUR DAN HAK AKSES BERDASARKAN PERAN (ROLE)
+==================================================================
+
+Aplikasi "Bank Sejahtera" memiliki tiga jenis peran dengan
+kemampuan yang berbeda-beda.
+
+------------------------------------------------------------------
+1. ADMIN
+------------------------------------------------------------------
+Peran dengan hak akses tertinggi, berfungsi sebagai pengelola sistem.
+
+*   Dashboard:
+    -   Melihat ringkasan saldo pribadinya (jika ada transaksi).
+
+*   Manajemen Transaksi:
+    -   Melihat riwayat transaksi dari SEMUA nasabah.
+    -   Mengedit transaksi milik nasabah manapun.
+    -   Menghapus transaksi milik nasabah manapun.
+
+*   Manajemen Pengguna:
+    -   Mengakses halaman "Manajemen User" untuk melihat daftar semua pengguna.
+
+*   Profil:
+    -   Mengelola profil dan data diri sendiri.
+
+------------------------------------------------------------------
+2. TELLER
+------------------------------------------------------------------
+Peran ini berfungsi sebagai pengawas atau auditor transaksi.
+
+*   Dashboard:
+    -   Melihat ringkasan saldo pribadinya.
+
+*   Manajemen Transaksi:
+    -   Melihat riwayat transaksi dari SEMUA nasabah (read-only).
+    -   TIDAK BISA menambah, mengedit, atau menghapus transaksi nasabah.
+
+*   Profil:
+    -   Mengelola profil dan data diri sendiri.
+
+------------------------------------------------------------------
+3. NASABAH
+------------------------------------------------------------------
+Peran standar untuk pengguna biasa.
+
+*   Dashboard:
+    -   Melihat ringkasan saldo PRIBADI.
+
+*   Manajemen Transaksi:
+    -   Menambah transaksi baru untuk akunnya sendiri.
+    -   Melihat riwayat transaksi PRIBADI.
+    -   Mengedit dan menghapus transaksi miliknya sendiri.
+
+*   Profil:
+    -   Mengelola profil dan data diri sendiri.
+
+*   Batasan:
+    -   TIDAK BISA melihat data (saldo, riwayat, profil) milik nasabah lain.
+
+Ringkasan
+Fitur	Nasabah	Teller	Admin
+Lihat Saldo Pribadi	✅	✅	✅
+Tambah Transaksi Pribadi	✅	❌	❌
+Lihat Riwayat Pribadi	✅	✅	✅
+Lihat Riwayat Semua Nasabah	❌	✅	✅
+Edit/Hapus Transaksi Pribadi	✅	✅	✅
+Edit/Hapus Transaksi Nasabah Lain	❌	❌	✅
+Lihat Daftar Semua User	❌	❌	✅
