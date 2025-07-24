@@ -1,0 +1,76 @@
+==================================================================
+  DOKUMENTASI KERENTANAN APLIKASI "BANK SEJAHTERA"
+==================================================================
+
+PERINGATAN: Aplikasi ini sengaja dibuat tidak aman untuk tujuan
+pembelajaran penetration testing. JANGAN gunakan kode ini di
+lingkungan produksi.
+
+------------------------------------------------------------------
+1. SQL INJECTION (SQLi) - Bypass Autentikasi
+------------------------------------------------------------------
+
+*   Lokasi: `login.php`
+*   Deskripsi: Halaman login rentan terhadap SQL Injection karena menggunakan penyambungan string (concatenation) untuk membangun query SQL, bukan prepared statements. Ini memungkinkan penyerang untuk memanipulasi query dan melewati proses login.
+
+*   Kode Rentan (`login.php`):
+    $sql = "SELECT * FROM users WHERE email = '{$email}' AND password = '{$hashed_password}'";
+
+*   Cara Eksploitasi:
+    -   Pada field Email, masukkan payload: admin' OR '1'='1' -- 
+    -   Pada field Password, masukkan password apa saja.
+    -   Query akan menjadi `... WHERE email = 'admin' OR '1'='1' -- ' AND ...` yang akan selalu benar, dan Anda akan login sebagai user pertama (biasanya admin).
+
+------------------------------------------------------------------
+2. STORED CROSS-SITE SCRIPTING (XSS)
+------------------------------------------------------------------
+
+*   Lokasi Input: `profil.php` (Nama Lengkap), `tambah_transaksi.php` (Deskripsi)
+*   Lokasi Output: `dashboard.php`, `riwayat.php`
+*   Deskripsi: Aplikasi gagal membersihkan (sanitize) input dari pengguna sebelum menyimpannya ke database dan menampilkannya kembali di halaman. Ini memungkinkan penyerang untuk menyuntikkan skrip (JavaScript) yang akan dieksekusi oleh browser pengguna lain.
+
+*   Kode Rentan (`riwayat.php`):
+    <td><?php echo $trx['deskripsi']; ?></td>
+
+*   Cara Eksploitasi:
+    -   Login sebagai nasabah.
+    -   Pada halaman "Tambah Transaksi", masukkan payload berikut di field Deskripsi: <script>alert('XSS Berhasil!')</script>
+    -   Simpan transaksi.
+    -   Setiap kali deskripsi transaksi ini ditampilkan (misalnya di halaman Riwayat), skrip akan dieksekusi.
+
+------------------------------------------------------------------
+3. INSECURE DIRECT OBJECT REFERENCE (IDOR)
+------------------------------------------------------------------
+
+*   Lokasi: `edit_transaksi.php`, `hapus_transaksi.php`
+*   Deskripsi: Aplikasi tidak memverifikasi apakah objek (transaksi) yang akan diakses atau dimodifikasi benar-benar milik pengguna yang sedang login. Penyerang dapat mengakses, mengubah, atau menghapus data milik pengguna lain hanya dengan mengubah nilai ID di URL.
+
+*   Kode Rentan (`hapus_transaksi.php`):
+    $sql = "DELETE FROM transactions WHERE id = ?";
+    $stmt->execute([$transaction_id]);
+
+*   Cara Eksploitasi:
+    1. Login sebagai Nasabah A dan catat ID salah satu transaksinya (misal, dari URL edit: `edit_transaksi.php?id=55`).
+    2. Logout, lalu login sebagai Nasabah B.
+    3. Akses URL secara langsung: `.../hapus_transaksi.php?id=55`
+    4. Transaksi milik Nasabah A akan terhapus, meskipun yang sedang login adalah Nasabah B.
+
+------------------------------------------------------------------
+4. UNRESTRICTED FILE UPLOAD
+------------------------------------------------------------------
+
+*   Lokasi: `profil.php`
+*   Deskripsi: Fitur upload foto profil tidak memvalidasi ekstensi file secara ketat. Ini memungkinkan penyerang untuk mengunggah file dengan ekstensi berbahaya, seperti `.php`, yang dapat dieksekusi di server.
+
+*   Kode Rentan (`profil.php`):
+    // Validasi ekstensi file dihapus untuk tujuan pembelajaran.
+    if ($file_size < 2000000) { ... }
+
+*   Cara Eksploitasi:
+    1. Buat sebuah file bernama `shell.php` dengan isi: <?php system($_GET['cmd']); ?>
+    2. Login sebagai nasabah.
+    3. Buka halaman "Profil Saya".
+    4. Unggah file `shell.php` sebagai foto profil.
+    5. Cari tahu nama file yang baru diunggah (misal, dengan melihat source code halaman atau menebak berdasarkan format `user_id-timestamp.php`).
+    6. Akses shell tersebut melalui URL: `.../assets/uploads/profiles/nama_file_shell.php?cmd=ls`
+    7. Anda sekarang dapat menjalankan perintah apapun di server.
