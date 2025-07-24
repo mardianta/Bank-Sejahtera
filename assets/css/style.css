@@ -1,0 +1,198 @@
+/* Reset sederhana & gaya dasar */
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+}
+
+header h1 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+header nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+header nav ul li {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    color: #777;
+}
+
+/* Gaya untuk form */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Penting untuk padding */
+}
+
+button {
+    display: inline-block;
+    background-color: #5cb85c;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
+/* Gaya untuk pesan notifikasi */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+/* Gaya untuk Dashboard */
+.saldo {
+    font-size: 2em;
+    font-weight: bold;
+    color: #3c763d;
+}
+
+/* Gaya untuk tabel riwayat */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.table th, .table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+.table th {
+    background-color: #f2f2f2;
+}
+.text-success {
+    color: green;
+    font-weight: bold;
+}
+.text-danger {
+    color: red;
+    font-weight: bold;
+}
+
+/* Gaya untuk tombol aksi di tabel */
+.btn-edit, .btn-hapus, .button-secondary {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.btn-edit {
+    background-color: #f0ad4e; /* Oranye */
+}
+.btn-edit:hover {
+    background-color: #ec971f;
+}
+
+.btn-hapus {
+    background-color: #d9534f; /* Merah */
+}
+.btn-hapus:hover {
+    background-color: #c9302c;
+}
+.button-secondary {
+    background-color: #777;
+}
+
+/* Gaya untuk Foto Profil */
+.profile-pic-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 20px;
+    border: 2px solid #fff;
+}
+
+.profile-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.profile-initial span {
+    line-height: 1;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
