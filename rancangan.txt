@@ -1,0 +1,105 @@
+==================================================================
+  RANCANGAN APLIKASI PENYIMPANAN UANG (BANK SEJAHTERA)
+==================================================================
+
+1. NAMA APLIKASI
+   - Bank Sejahtera
+
+2. TUJUAN APLIKASI
+   - Membantu pengguna untuk mencatat dan melacak aktivitas penyimpanan uang (pemasukan dan pengeluaran) secara digital dan sederhana.
+
+3. TEKNOLOGI YANG DIGUNAKAN
+   - Bahasa Pemrograman: PHP Native (Versi 8.0+)
+   - Database: MySQL atau MariaDB
+   - Frontend: HTML, CSS (tanpa framework untuk kesederhanaan)
+   - Web Server: Apache atau Nginx
+
+4. FITUR-FITUR UTAMA
+   - a. Autentikasi Pengguna:
+     - Registrasi Pengguna Baru (Nama, Email, Password)
+     - Login Pengguna (Email, Password)
+     - Logout
+
+   - b. Dashboard:
+     - Menampilkan ringkasan informasi.
+     - Menampilkan total saldo saat ini.
+     - Tombol/Link cepat untuk menambah transaksi.
+
+   - c. Manajemen Transaksi:
+     - Menambah Transaksi Baru (Pemasukan / Pengeluaran).
+       - Input: Jenis Transaksi (Pemasukan/Pengeluaran), Jumlah Uang, Deskripsi/Catatan, Tanggal.
+     - Melihat Riwayat Transaksi.
+       - Menampilkan daftar semua transaksi yang pernah dilakukan, diurutkan dari yang terbaru.
+       - Informasi yang ditampilkan: Tanggal, Deskripsi, Jenis, Jumlah.
+
+5. RANCANGAN DATABASE
+   - Nama Database: `db_tabungan`
+
+   - a. Tabel `users`
+     - Untuk menyimpan data pengguna.
+     - Kolom:
+       - `id` (INT, Primary Key, AUTO_INCREMENT)
+       - `nama_lengkap` (VARCHAR(100))
+       - `email` (VARCHAR(100), UNIQUE)
+       - `password` (VARCHAR(255)) -> akan di-hash
+       - `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+   - b. Tabel `transactions`
+     - Untuk menyimpan data semua transaksi.
+     - Kolom:
+       - `id` (INT, Primary Key, AUTO_INCREMENT)
+       - `user_id` (INT, Foreign Key ke `users.id`)
+       - `tipe` (ENUM('pemasukan', 'pengeluaran'))
+       - `jumlah` (DECIMAL(15, 2))
+       - `deskripsi` (TEXT)
+       - `tanggal_transaksi` (DATETIME)
+       - `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+6. STRUKTUR FOLDER PROYEK
+   /tabungan-pribadi/
+   |
+   |-- config/
+   |   |-- database.php         // File untuk koneksi ke database
+   |
+   |-- core/
+   |   |-- functions.php        // Kumpulan fungsi-fungsi bantuan (misal: format uang, cek login)
+   |   |-- init.php             // File inisialisasi (memuat config, functions, memulai session)
+   |
+   |-- templates/
+   |   |-- header.php           // Bagian atas halaman HTML (termasuk <head> dan navigasi)
+   |   |-- footer.php           // Bagian bawah halaman HTML
+   |
+   |-- assets/
+   |   |-- css/
+   |   |   |-- style.css        // File styling utama
+   |
+   |-- index.php                // Halaman utama, akan mengarahkan ke dashboard jika sudah login
+   |-- login.php                // Halaman form login dan proses login
+   |-- register.php             // Halaman form registrasi dan proses registrasi
+   |-- logout.php               // Proses untuk logout
+   |-- dashboard.php            // Halaman dashboard utama
+   |-- riwayat.php              // Halaman untuk menampilkan riwayat transaksi
+   |-- tambah_transaksi.php     // Halaman form tambah transaksi dan prosesnya
+
+7. ALUR KERJA APLIKASI (USER FLOW)
+   - Pengguna Baru:
+     1. Mengakses `register.php`.
+     2. Mengisi form dan submit.
+     3. Sistem memvalidasi data, menyimpan ke tabel `users` (password di-hash).
+     4. Pengguna diarahkan ke `login.php`.
+
+   - Pengguna Terdaftar:
+     1. Mengakses `login.php`.
+     2. Mengisi email dan password, lalu submit.
+     3. Sistem memverifikasi data dengan yang ada di database.
+     4. Jika berhasil, sistem membuat session untuk pengguna dan mengarahkan ke `dashboard.php`.
+     5. Jika gagal, tampilkan pesan error di halaman login.
+
+   - Setelah Login:
+     1. `dashboard.php` menampilkan total saldo (hasil dari `SUM(jumlah)` di tabel `transactions` dimana tipe='pemasukan' dikurangi `SUM(jumlah)` dimana tipe='pengeluaran').
+     2. Pengguna bisa klik "Tambah Transaksi" yang mengarah ke `tambah_transaksi.php`.
+     3. Pengguna mengisi form transaksi dan submit. Data disimpan ke tabel `transactions`.
+     4. Pengguna bisa klik "Riwayat Transaksi" yang mengarah ke `riwayat.php` untuk melihat semua catatan.
+     5. Pengguna klik "Logout" yang akan menghapus session dan mengarahkan kembali ke `login.php`.
+
+==================================================================
